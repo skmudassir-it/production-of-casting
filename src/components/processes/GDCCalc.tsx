@@ -3,12 +3,24 @@
 import { useState, useMemo } from "react";
 import { GDC_DEFAULTS, computeGDC, gdcChecks, GDC_DOC, GDC_FAQ } from "../engines/gdc";
 
-// ═══════════ SHARED UI ═══════════
+// ────────────────────────────────────────────────────────────
+// SHARED UI HELPERS
+// ────────────────────────────────────────────────────────────
 
 const fmt = (v: number, d = 2): string =>
   !isFinite(v) ? "—" : Number(v).toLocaleString("en-IN", { maximumFractionDigits: d });
 
-const Out = ({ label, val, unit, hi }: { label: string; val: string; unit: string; hi?: boolean }) => (
+const Out = ({
+  label,
+  val,
+  unit,
+  hi,
+}: {
+  label: string;
+  val: string;
+  unit: string;
+  hi?: boolean;
+}) => (
   <div
     style={{
       display: "flex",
@@ -16,19 +28,32 @@ const Out = ({ label, val, unit, hi }: { label: string; val: string; unit: strin
       padding: "6px 0",
       borderBottom: "1px dashed #2b2f37",
       ...(hi
-        ? { background: "linear-gradient(90deg, rgba(255,122,26,0.10), transparent)", borderRadius: 4 }
+        ? {
+            background:
+              "linear-gradient(90deg, rgba(255,122,26,0.10), transparent)",
+            borderRadius: 4,
+          }
         : {}),
     }}
   >
     <span style={{ fontSize: 12.5, color: "#b9bec8" }}>{label}</span>
     <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>
       {val}
-      <span style={{ fontSize: 11, fontWeight: 400, color: "#8a909b" }}> {unit}</span>
+      <span style={{ fontSize: 11, fontWeight: 400, color: "#8a909b" }}>
+        {" "}
+        {unit}
+      </span>
     </span>
   </div>
 );
 
-const Sec = ({ title, children }: { title: string; children: React.ReactNode }) => (
+const Sec = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => (
   <section
     style={{
       background: "#1d2026",
@@ -38,7 +63,11 @@ const Sec = ({ title, children }: { title: string; children: React.ReactNode }) 
       marginBottom: 16,
     }}
   >
-    <h3 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: "#ffb066" }}>{title}</h3>
+    <h3
+      style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: "#ffb066" }}
+    >
+      {title}
+    </h3>
     {children}
   </section>
 );
@@ -85,137 +114,142 @@ const Field = ({
   </label>
 );
 
-// ═══════════ STYLES ═══════════
+// ────────────────────────────────────────────────────────────
+// STYLES
+// ────────────────────────────────────────────────────────────
 
-const page: React.CSSProperties = {
-  minHeight: "100vh",
-  background: "#15171b",
-  color: "#e8e6e1",
-  fontFamily: "'Segoe UI', system-ui, sans-serif",
-  padding: "24px 18px 60px",
-  maxWidth: 1180,
-  margin: "0 auto",
+const st: Record<string, React.CSSProperties> = {
+  page: {
+    minHeight: "100vh",
+    background: "#15171b",
+    color: "#e8e6e1",
+    fontFamily: "'Segoe UI', system-ui, sans-serif",
+    padding: "24px 18px 60px",
+    maxWidth: 1180,
+    margin: "0 auto",
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    gap: 16,
+    flexWrap: "wrap",
+    marginBottom: 14,
+  },
+  eyebrow: {
+    fontSize: 11,
+    letterSpacing: "0.22em",
+    color: "#ff7a1a",
+    fontWeight: 700,
+    marginBottom: 6,
+  },
+  h1: { margin: 0, fontSize: 28, fontWeight: 800 },
+  statusPill: {
+    border: "1px solid",
+    borderRadius: 999,
+    padding: "8px 16px",
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: "0.08em",
+  },
+  printBtn: {
+    background: "transparent",
+    border: "1px solid #343943",
+    borderRadius: 8,
+    color: "#b9bec8",
+    padding: "8px 16px",
+    fontSize: 12,
+    fontWeight: 700,
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+  },
+  tabs: { display: "flex", gap: 8, margin: "16px 0 22px", flexWrap: "wrap" },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "minmax(300px, 420px) 1fr",
+    gap: 26,
+    alignItems: "start",
+  },
+  colTitle: {
+    fontSize: 13,
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    color: "#9aa0ab",
+    borderBottom: "2px solid #ff7a1a",
+    paddingBottom: 8,
+    margin: "0 0 14px",
+  },
+  check: {
+    display: "grid",
+    gridTemplateColumns: "10px 1fr auto",
+    gap: "2px 10px",
+    alignItems: "center",
+    padding: "7px 0",
+    borderBottom: "1px dashed #2b2f37",
+  },
+  docH: { color: "#ffb066", fontSize: 16, fontWeight: 700, margin: "26px 0 8px" },
+  docP: { fontSize: 13.5, lineHeight: 1.75, color: "#c9cdd5", margin: "8px 0" },
+  formula: {
+    display: "block",
+    background: "#101216",
+    border: "1px solid #2b2f37",
+    borderRadius: 6,
+    padding: "8px 12px",
+    fontFamily: "Consolas, monospace",
+    fontSize: 12.5,
+    color: "#ffd9b3",
+    margin: "8px 0",
+    overflowX: "auto",
+  },
+  faqQ: { color: "#fff", fontSize: 14, fontWeight: 700, margin: "20px 0 6px" },
+  footer: { marginTop: 28, fontSize: 11.5, color: "#6e7480", textAlign: "center" },
+  footerCredit: {
+    marginTop: 6,
+    fontSize: 11,
+    color: "#555a63",
+    textAlign: "center",
+  },
+  table: { width: "100%", borderCollapse: "collapse", marginTop: 10, fontSize: 12.5 },
+  th: {
+    textAlign: "left",
+    color: "#9aa0ab",
+    fontWeight: 600,
+    borderBottom: "1px solid #343943",
+    padding: "6px 6px",
+  },
+  td: {
+    padding: "6px 6px",
+    borderBottom: "1px solid #23262c",
+    fontVariantNumeric: "tabular-nums",
+  },
+  docWrapper: { maxWidth: 820 },
+  // Override styles inside the rendered doc HTML
+  docHtmlH3: {
+    color: "#ffb066",
+    fontSize: 15,
+    fontWeight: 700,
+    margin: "22px 0 6px",
+  },
+  docHtmlP: { fontSize: 13.5, lineHeight: 1.75, color: "#c9cdd5", margin: "8px 0" },
+  docHtmlPre: {
+    display: "block",
+    background: "#101216",
+    border: "1px solid #2b2f37",
+    borderRadius: 6,
+    padding: "8px 12px",
+    fontFamily: "Consolas, monospace",
+    fontSize: 12.5,
+    color: "#ffd9b3",
+    margin: "8px 0",
+    overflowX: "auto",
+    whiteSpace: "pre-wrap",
+    wordBreak: "break-word",
+  },
+  docHtmlUl: { fontSize: 13.5, lineHeight: 1.75, color: "#c9cdd5", paddingLeft: 20 },
+  docHtmlLi: { margin: "4px 0" },
 };
-
-const header: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-end",
-  gap: 16,
-  flexWrap: "wrap",
-  marginBottom: 14,
-};
-
-const eyebrow: React.CSSProperties = {
-  fontSize: 11,
-  letterSpacing: "0.22em",
-  color: "#ff7a1a",
-  fontWeight: 700,
-  marginBottom: 6,
-};
-
-const h1: React.CSSProperties = { margin: 0, fontSize: 28, fontWeight: 800 };
-
-const tabs: React.CSSProperties = {
-  display: "flex",
-  gap: 8,
-  margin: "16px 0 22px",
-  flexWrap: "wrap",
-};
-
-const grid: React.CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "minmax(300px, 420px) 1fr",
-  gap: 26,
-  alignItems: "start",
-};
-
-const colTitle: React.CSSProperties = {
-  fontSize: 13,
-  letterSpacing: "0.18em",
-  textTransform: "uppercase",
-  color: "#9aa0ab",
-  borderBottom: "2px solid #ff7a1a",
-  paddingBottom: 8,
-  margin: "0 0 14px",
-};
-
-const checkGrid: React.CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "10px 1fr auto",
-  gap: "2px 10px",
-  alignItems: "center",
-  padding: "7px 0",
-  borderBottom: "1px dashed #2b2f37",
-};
-
-// Doc styles
-const docH: React.CSSProperties = {
-  color: "#ffb066",
-  fontSize: 16,
-  fontWeight: 700,
-  margin: "26px 0 8px",
-};
-
-const docP: React.CSSProperties = {
-  fontSize: 13.5,
-  lineHeight: 1.75,
-  color: "#c9cdd5",
-  margin: "8px 0",
-};
-
-const formula: React.CSSProperties = {
-  display: "block",
-  background: "#101216",
-  border: "1px solid #2b2f37",
-  borderRadius: 6,
-  padding: "8px 12px",
-  fontFamily: "Consolas, monospace",
-  fontSize: 12.5,
-  color: "#ffd9b3",
-  margin: "8px 0",
-  overflowX: "auto",
-};
-
-const faqQ: React.CSSProperties = {
-  color: "#fff",
-  fontSize: 14,
-  fontWeight: 700,
-  margin: "20px 0 6px",
-};
-
-const faqA: React.CSSProperties = {
-  fontSize: 13.5,
-  lineHeight: 1.75,
-  color: "#c9cdd5",
-  margin: "0 0 8px",
-};
-
-const footer: React.CSSProperties = {
-  marginTop: 28,
-  fontSize: 11.5,
-  color: "#6e7480",
-  textAlign: "center",
-};
-
-const sectionList: React.CSSProperties = {
-  fontSize: 13.5,
-  lineHeight: 1.85,
-  color: "#c9cdd5",
-  paddingLeft: 18,
-  margin: "4px 0",
-};
-
-const statusPill = (ok: boolean): React.CSSProperties => ({
-  border: "1px solid",
-  borderColor: ok ? "#2ecc71" : "#ff5c33",
-  borderRadius: 999,
-  padding: "6px 14px",
-  fontSize: 12,
-  fontWeight: 700,
-  letterSpacing: "0.08em",
-  color: ok ? "#2ecc71" : "#ff5c33",
-});
 
 const tabStyle = (on: boolean): React.CSSProperties => ({
   background: on ? "#ff7a1a" : "#1d2026",
@@ -228,109 +262,220 @@ const tabStyle = (on: boolean): React.CSSProperties => ({
   cursor: "pointer",
 });
 
-const TAB_LABELS = ["Calculator", "Documentation", "FAQ"] as const;
-type Tab = (typeof TAB_LABELS)[number];
+// ────────────────────────────────────────────────────────────
+// DOC HTML RENDERER
+// ────────────────────────────────────────────────────────────
 
-// ═══════════ FIELD DEFINITIONS ═══════════
+function DocHtml({ html }: { html: string }) {
+  const parts = html.split(/(<h3>.*?<\/h3>|<p>.*?<\/p>|<pre>.*?<\/pre>|<ul>.*?<\/ul>)/g);
 
-const FIELDS: { key: string; label: string; unit?: string }[] = [
-  { key: "pourHeight", label: "Pour height", unit: "mm" },
-  { key: "sprueTopDia", label: "Sprue top diameter", unit: "mm" },
-  { key: "sprueBottomDia", label: "Sprue bottom diameter", unit: "mm" },
-  { key: "runnerArea", label: "Total runner area", unit: "mm²" },
-  { key: "gateArea", label: "Total gate area", unit: "mm²" },
-  { key: "castWt", label: "Casting weight (per cavity)", unit: "g" },
-  { key: "alloyDensity", label: "Alloy density", unit: "g/cc" },
-  { key: "cavities", label: "Number of cavities" },
-  { key: "wallThk", label: "Wall thickness", unit: "mm" },
-  { key: "gatingRatio", label: "Gating ratio (S:R:G)" },
-  { key: "sectionThk", label: "Section thickness", unit: "mm" },
-  { key: "meltTemp", label: "Melt temperature", unit: "°C" },
-  { key: "dieTemp", label: "Die temperature", unit: "°C" },
-  { key: "Cd", label: "Discharge coefficient, Cd" },
-];
+  return (
+    <div>
+      {parts.map((part, i) => {
+        if (part.startsWith("<h3>")) {
+          const inner = part.replace(/<\/?h3>/g, "");
+          return (
+            <h3 key={i} style={st.docHtmlH3}>
+              {parseInlineHtml(inner)}
+            </h3>
+          );
+        }
+        if (part.startsWith("<p>")) {
+          const inner = part.replace(/<\/?p>/g, "").trim();
+          if (!inner) return null;
+          return (
+            <p key={i} style={st.docHtmlP}>
+              {parseInlineHtml(inner)}
+            </p>
+          );
+        }
+        if (part.startsWith("<pre>")) {
+          const inner = part.replace(/<\/?pre>/g, "");
+          return (
+            <pre key={i} style={st.docHtmlPre}>
+              {parseInlineHtml(inner)}
+            </pre>
+          );
+        }
+        if (part.startsWith("<ul>")) {
+          const inner = part.replace(/<\/?ul>/g, "").trim();
+          const items = inner
+            .split(/<\/?li>/g)
+            .filter((s) => s.trim())
+            .map((s) => s.trim());
+          return (
+            <ul key={i} style={st.docHtmlUl}>
+              {items.map((item, j) => (
+                <li key={j} style={st.docHtmlLi}>
+                  {parseInlineHtml(item)}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        return null;
+      })}
+    </div>
+  );
+}
 
-// ═══════════ MAIN COMPONENT ═══════════
+/** Renders inline HTML elements: <strong>, <em>, <sub>, <a> */
+function parseInlineHtml(html: string): React.ReactNode {
+  let s = html
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"');
+
+  const parts = s.split(/(<strong>.*?<\/strong>|<em>.*?<\/em>|<sub>.*?<\/sub>|<a\s.*?<\/a>)/g);
+
+  return parts.map((part, i) => {
+    if (part.startsWith("<strong>")) {
+      return <strong key={i}>{part.replace(/<\/?strong>/g, "")}</strong>;
+    }
+    if (part.startsWith("<em>")) {
+      return <em key={i}>{part.replace(/<\/?em>/g, "")}</em>;
+    }
+    if (part.startsWith("<sub>")) {
+      return <sub key={i}>{part.replace(/<\/?sub>/g, "")}</sub>;
+    }
+    if (part.startsWith("<a ")) {
+      const hrefMatch = part.match(/href="([^"]*)"/);
+      const href = hrefMatch ? hrefMatch[1] : "#";
+      const text = part.replace(/<a[^>]*>/, "").replace(/<\/a>/, "");
+      return (
+        <a key={i} href={href} style={{ color: "#ffb066" }}>
+          {text}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
+// ────────────────────────────────────────────────────────────
+// MAIN COMPONENT
+// ────────────────────────────────────────────────────────────
 
 export default function GDCCalc() {
-  const [tab, setTab] = useState<Tab>("Calculator");
-  const [inp, setInp] = useState<Record<string, string>>({ ...GDC_DEFAULTS });
+  const [tab, setTab] = useState("calc");
+  const [inp, setInp] = useState({ ...GDC_DEFAULTS });
 
-  const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setInp((p) => ({ ...p, [key]: e.target.value }));
+  const set =
+    (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
+      setInp((p) => ({ ...p, [key]: e.target.value }));
 
   const c = useMemo(() => computeGDC(inp), [inp]);
   const checks = useMemo(() => gdcChecks(inp, c), [inp, c]);
   const allOk = checks.every((x) => x.ok);
 
-  // ════ CALCULATOR TAB ════
+  // ── CALCULATOR TAB ──────────────────────────────────────
+
   const CalcPage = (
     <>
-      <div style={grid}>
+      <div style={st.grid} className="gdc-grid">
         {/* INPUTS */}
         <div className="no-print">
-          <h2 style={colTitle}>Input variables</h2>
+          <h2 style={st.colTitle}>Input variables</h2>
+
           <Sec title="Gating geometry">
-            {FIELDS.filter(
-              (f) =>
-                f.key === "pourHeight" ||
-                f.key === "sprueTopDia" ||
-                f.key === "sprueBottomDia" ||
-                f.key === "runnerArea" ||
-                f.key === "gateArea" ||
-                f.key === "gatingRatio"
-            ).map((f) => (
-              <Field
-                key={f.key}
-                label={f.label}
-                value={inp[f.key] ?? ""}
-                onChange={set(f.key)}
-                unit={f.unit}
-              />
-            ))}
+            <Field
+              label="Pour height"
+              value={inp.pourHeight}
+              onChange={set("pourHeight")}
+              unit="mm"
+            />
+            <Field
+              label="Sprue top diameter"
+              value={inp.sprueTopDia}
+              onChange={set("sprueTopDia")}
+              unit="mm"
+            />
+            <Field
+              label="Sprue bottom diameter"
+              value={inp.sprueBottomDia}
+              onChange={set("sprueBottomDia")}
+              unit="mm"
+            />
+            <Field
+              label="Total runner area"
+              value={inp.runnerArea}
+              onChange={set("runnerArea")}
+              unit="mm²"
+            />
+            <Field
+              label="Total gate area"
+              value={inp.gateArea}
+              onChange={set("gateArea")}
+              unit="mm²"
+            />
+            <Field
+              label="Discharge coefficient, Cd"
+              value={inp.Cd}
+              onChange={set("Cd")}
+            />
           </Sec>
 
           <Sec title="Casting">
-            {FIELDS.filter(
-              (f) =>
-                f.key === "castWt" ||
-                f.key === "alloyDensity" ||
-                f.key === "cavities" ||
-                f.key === "wallThk" ||
-                f.key === "sectionThk"
-            ).map((f) => (
-              <Field
-                key={f.key}
-                label={f.label}
-                value={inp[f.key] ?? ""}
-                onChange={set(f.key)}
-                unit={f.unit}
-              />
-            ))}
+            <Field
+              label="Casting weight (per cavity)"
+              value={inp.castWt}
+              onChange={set("castWt")}
+              unit="g"
+            />
+            <Field
+              label="Alloy density"
+              value={inp.alloyDensity}
+              onChange={set("alloyDensity")}
+              unit="g/cc"
+            />
+            <Field
+              label="Number of cavities"
+              value={inp.cavities}
+              onChange={set("cavities")}
+            />
+            <Field
+              label="Wall thickness"
+              value={inp.wallThk}
+              onChange={set("wallThk")}
+              unit="mm"
+            />
+            <Field
+              label="Section thickness"
+              value={inp.sectionThk}
+              onChange={set("sectionThk")}
+              unit="mm"
+            />
+            <Field
+              label="Gating ratio (S:R:G)"
+              value={inp.gatingRatio}
+              onChange={set("gatingRatio")}
+            />
           </Sec>
 
-          <Sec title="Process & constants">
-            {FIELDS.filter(
-              (f) => f.key === "meltTemp" || f.key === "dieTemp" || f.key === "Cd"
-            ).map((f) => (
-              <Field
-                key={f.key}
-                label={f.label}
-                value={inp[f.key] ?? ""}
-                onChange={set(f.key)}
-                unit={f.unit}
-              />
-            ))}
+          <Sec title="Process &amp; thermal">
+            <Field
+              label="Melt temperature"
+              value={inp.meltTemp}
+              onChange={set("meltTemp")}
+              unit="°C"
+            />
+            <Field
+              label="Die temperature"
+              value={inp.dieTemp}
+              onChange={set("dieTemp")}
+              unit="°C"
+            />
           </Sec>
         </div>
 
         {/* OUTPUTS */}
         <div>
-          <h2 style={colTitle}>Output parameters</h2>
+          <h2 style={st.colTitle}>Output parameters</h2>
 
           <Sec title="Process checks">
             {checks.map((x) => (
-              <div key={x.label} style={checkGrid}>
+              <div key={x.label} style={st.check}>
                 <span
                   style={{
                     width: 9,
@@ -339,7 +484,9 @@ export default function GDCCalc() {
                     background: x.ok ? "#2ecc71" : "#ff5c33",
                   }}
                 />
-                <span style={{ fontSize: 12.5, color: "#d6d9df" }}>{x.label}</span>
+                <span style={{ fontSize: 12.5, color: "#d6d9df" }}>
+                  {x.label}
+                </span>
                 <span
                   style={{
                     fontSize: 13.5,
@@ -350,24 +497,30 @@ export default function GDCCalc() {
                 >
                   {x.val}
                 </span>
-                <span style={{ gridColumn: "2 / 4", fontSize: 11, color: "#7d838e" }}>
+                <span
+                  style={{
+                    gridColumn: "2 / 4",
+                    fontSize: 11,
+                    color: "#7d838e",
+                  }}
+                >
                   {x.rule}
                 </span>
               </div>
             ))}
           </Sec>
 
-          <Sec title="Flow & fill">
+          <Sec title="Flow &amp; fill">
             <Out label="Effective pour head" val={fmt(c.H_eff, 0)} unit="mm" />
             <Out label="Gate velocity" val={fmt(c.v_gate, 2)} unit="m/s" hi />
             <Out label="Sprue exit velocity" val={fmt(c.v_sprue, 2)} unit="m/s" />
             <Out label="Volumetric flow rate, Q" val={fmt(c.Q, 1)} unit="cc/s" />
             <Out label="Cavity volume, V" val={fmt(c.V, 1)} unit="cc" />
             <Out label="Pour time" val={fmt(c.t_pour, 2)} unit="s" hi />
-            <Out label="Reynolds number, Re" val={fmt(c.Re, 0)} unit="—" />
+            <Out label="Reynolds number, Re" val={fmt(c.Re, 0)} unit="" />
           </Sec>
 
-          <Sec title="Solidification & yield">
+          <Sec title="Solidification &amp; yield">
             <Out
               label="Solidification time"
               val={fmt(c.t_solid, 2)}
@@ -375,6 +528,7 @@ export default function GDCCalc() {
               hi={c.t_solid <= c.t_pour}
             />
             <Out label="Casting yield" val={fmt(c.yieldPct, 1)} unit="%" hi />
+            <Out label="Estimated runner volume" val={fmt(c.runnerVol, 1)} unit="cc" />
             <Out label="Estimated runner weight" val={fmt(c.runnerWt, 1)} unit="g" />
             <Out label="Total poured weight" val={fmt(c.totalWt, 1)} unit="g" />
           </Sec>
@@ -393,62 +547,186 @@ export default function GDCCalc() {
               unit=""
             />
           </Sec>
+
+          <Sec title="Parameter sheet (for shop floor)">
+            <table style={st.table}>
+              <thead>
+                <tr>
+                  <th style={st.th}>#</th>
+                  <th style={st.th}>Parameter</th>
+                  <th style={st.th}>Units</th>
+                  <th style={st.th}>Design value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(
+                  [
+                    ["Pour height", "mm", inp.pourHeight],
+                    ["Sprue top diameter", "mm", inp.sprueTopDia],
+                    ["Sprue bottom diameter", "mm", inp.sprueBottomDia],
+                    ["Total runner area", "mm²", inp.runnerArea],
+                    ["Total gate area", "mm²", inp.gateArea],
+                    ["Discharge coefficient, Cd", "", inp.Cd],
+                    ["Casting weight (per cavity)", "g", inp.castWt],
+                    ["Alloy density", "g/cc", inp.alloyDensity],
+                    ["Number of cavities", "", inp.cavities],
+                    ["Wall thickness", "mm", inp.wallThk],
+                    ["Section thickness", "mm", inp.sectionThk],
+                    ["Gating ratio (S:R:G)", "", inp.gatingRatio],
+                    ["Melt temperature", "°C", inp.meltTemp],
+                    ["Die temperature", "°C", inp.dieTemp],
+                    ["Effective pour head", "mm", fmt(c.H_eff, 0)],
+                    ["Gate velocity", "m/s", fmt(c.v_gate, 2)],
+                    ["Sprue exit velocity", "m/s", fmt(c.v_sprue, 2)],
+                    ["Flow rate, Q", "cc/s", fmt(c.Q, 1)],
+                    ["Cavity volume, V", "cc", fmt(c.V, 1)],
+                    ["Pour time", "s", fmt(c.t_pour, 2)],
+                    ["Reynolds number, Re", "", fmt(c.Re, 0)],
+                    ["Solidification time", "s", fmt(c.t_solid, 2)],
+                    ["Casting yield", "%", fmt(c.yieldPct, 1)],
+                    ["Runner volume", "cc", fmt(c.runnerVol, 1)],
+                    ["Runner weight", "g", fmt(c.runnerWt, 1)],
+                    ["Total poured weight", "g", fmt(c.totalWt, 1)],
+                  ] as [string, string, string][]
+                ).map((row, i) => (
+                  <tr key={i}>
+                    <td style={st.td}>{i + 1}</td>
+                    <td style={st.td}>{row[0]}</td>
+                    <td style={st.td}>{row[1]}</td>
+                    <td style={{ ...st.td, fontWeight: 600 }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Sec>
         </div>
       </div>
     </>
   );
 
-  // ════ DOCUMENTATION TAB ════
+  // ── DOCUMENTATION TAB ────────────────────────────────────
+
   const DocPage = (
-    <div style={{ maxWidth: 800, margin: "0 auto" }}>
-      <div dangerouslySetInnerHTML={{ __html: GDC_DOC }} />
+    <div style={st.docWrapper}>
+      <h2 style={st.colTitle}>
+        Documentation — Gravity Die Casting process engineering
+      </h2>
+      <p style={st.docP}>
+        Gravity Die Casting (GDC) — also called Permanent Mould Casting — fills a
+        reusable steel or cast-iron die by pouring molten metal from a ladle into
+        a pouring basin. The metal flows under gravity through a tapered sprue,
+        along runners, and through gates into the cavity.
+      </p>
+      <DocHtml html={GDC_DOC} />
     </div>
   );
 
-  // ════ FAQ TAB ════
-  const FAQPage = (
-    <div style={{ maxWidth: 780, margin: "0 auto" }}>
-      {GDC_FAQ.map(([q, a], i) => (
-        <div key={i}>
-          <div style={faqQ}>{q}</div>
-          <div style={faqA}>{a}</div>
+  // ── FAQ TAB ──────────────────────────────────────────────
+
+  const FaqPage = (
+    <div style={st.docWrapper}>
+      <h2 style={st.colTitle}>FAQ — GDC process calculator</h2>
+      {GDC_FAQ.map(([q, a]) => (
+        <div key={q}>
+          <div style={st.faqQ}>{q}</div>
+          <p style={st.docP}>{a}</p>
         </div>
       ))}
     </div>
   );
 
-  // ════ RENDER ════
+  // ── RENDER ───────────────────────────────────────────────
+
   return (
-    <div style={page}>
-      {/* HEADER */}
-      <div style={header}>
+    <div style={st.page}>
+      <style>{`
+        input[type=number]{ -moz-appearance:textfield; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+        input:focus, select:focus, button:focus { outline: 2px solid #ff7a1a; outline-offset: 1px; }
+        @media (max-width: 880px){ .gdc-grid{ grid-template-columns: 1fr !important; } }
+        @media print {
+          @page { size: A4; margin: 12mm 14mm; }
+          * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          html, body, body > div, body > div > div {
+            background: #fff !important; color: #111 !important;
+          }
+          section, [style*="background:#1d"], [style*="background: #1d"],
+          [style*="background:#10"], [style*="background: #10"],
+          [style*="background:#14"], [style*="background: #14"] {
+            background: #fff !important; border-color: #ddd !important; box-shadow: none !important;
+          }
+          div[style*="color:#e8e6e1"], span[style*="color:#e8e6e1"],
+          span[style*="color:#b9bec8"], span[style*="color: #b9bec8"],
+          span[style*="color:#c9cdd5"], span[style*="color: #c9cdd5"],
+          span[style*="color:#d6d9df"], span[style*="color: #d6d9df"],
+          p[style*="color:#c9cdd5"], p[style*="color: #c9cdd5"] {
+            color: #222 !important;
+          }
+          a { color: #0056b3 !important; }
+          .no-print { display: none !important; }
+        }
+      `}</style>
+
+      <header style={st.header}>
         <div>
-          <div style={eyebrow}>PROCESS CALCULATOR</div>
-          <h1 style={h1}>Gravity Die Casting (GDC)</h1>
+          <div style={st.eyebrow}>PRODUCTION OF CASTING · GDC</div>
+          <h1 style={st.h1}>Gravity Die Casting</h1>
         </div>
-        {tab === "Calculator" && (
-          <div style={statusPill(allOk)}>{allOk ? "● PROCESS OK" : "● ATTENTION"}</div>
-        )}
-      </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          {tab === "calc" && (
+            <>
+              <button
+                className="no-print"
+                style={st.printBtn}
+                onClick={() => window.print()}
+                title="Print parameter sheet"
+              >
+                🖨 Print
+              </button>
+              <div
+                style={{
+                  ...st.statusPill,
+                  background: allOk ? "#123d22" : "#46190f",
+                  borderColor: allOk ? "#2ecc71" : "#ff5c33",
+                  color: allOk ? "#7af2ae" : "#ffb09a",
+                }}
+              >
+                {allOk ? "● ALL CHECKS PASS" : "● REVIEW REQUIRED"}
+              </div>
+            </>
+          )}
+        </div>
+      </header>
 
-      {/* TABS */}
-      <div style={tabs}>
-        {TAB_LABELS.map((t) => (
-          <button key={t} style={tabStyle(t === tab)} onClick={() => setTab(t)}>
-            {t}
-          </button>
-        ))}
-      </div>
+      <nav style={st.tabs}>
+        <button style={tabStyle(tab === "calc")} onClick={() => setTab("calc")}>
+          Calculator
+        </button>
+        <button style={tabStyle(tab === "doc")} onClick={() => setTab("doc")}>
+          Documentation
+        </button>
+        <button style={tabStyle(tab === "faq")} onClick={() => setTab("faq")}>
+          FAQ
+        </button>
+      </nav>
 
-      {/* TAB CONTENT */}
-      {tab === "Calculator" && CalcPage}
-      {tab === "Documentation" && DocPage}
-      {tab === "FAQ" && FAQPage}
+      {tab === "calc" ? CalcPage : tab === "doc" ? DocPage : FaqPage}
 
-      {/* FOOTER */}
-      <div style={footer}>
-        GDC Process Calculator · Formulas adapted from NADCA Gating Manual, Campbell&apos;s{" "}
+      <footer style={st.footer}>
+        GDC process design · formulas adapted from NADCA Gating Manual, Campbell&apos;s{" "}
         <em>Castings</em>, and ASM Handbook Vol. 15
+      </footer>
+      <div style={st.footerCredit}>
+        Design &amp; developed by{" "}
+        <a
+          href="https://skmudassir.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#7d838e", textDecoration: "underline" }}
+        >
+          Mudassir Shaik
+        </a>{" "}
+        (skmudassir.in)
       </div>
     </div>
   );

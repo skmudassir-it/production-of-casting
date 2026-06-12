@@ -19,7 +19,7 @@ const PROCESSES = [
 
 type ProcessId = (typeof PROCESSES)[number]["id"];
 
-const processStyle = (active: boolean): React.CSSProperties => ({
+const tabBtn = (active: boolean): React.CSSProperties => ({
   background: active ? "#ff7a1a" : "#1d2026",
   color: active ? "#15171b" : "#9aa0ab",
   border: "1px solid " + (active ? "#ff7a1a" : "#2b2f37"),
@@ -28,12 +28,10 @@ const processStyle = (active: boolean): React.CSSProperties => ({
   fontSize: 12.5,
   fontWeight: 700,
   cursor: "pointer",
-  textAlign: "center",
-  whiteSpace: "nowrap",
-  transition: "all 0.15s",
+  textAlign: "center" as const,
 });
 
-const labelStyle: React.CSSProperties = {
+const tabLabel: React.CSSProperties = {
   display: "block",
   fontSize: 9.5,
   fontWeight: 400,
@@ -47,6 +45,15 @@ export default function DieCastingStudio() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#15171b" }}>
+      <style>{`
+        .desktop-tabs { display: flex; }
+        .mobile-select { display: none; }
+        @media (max-width: 700px) {
+          .desktop-tabs { display: none !important; }
+          .mobile-select { display: block !important; }
+        }
+      `}</style>
+
       {/* Process selector bar */}
       <div
         style={{
@@ -55,14 +62,13 @@ export default function DieCastingStudio() {
           zIndex: 100,
           background: "#0d0f13",
           borderBottom: "1px solid #1f2229",
-          padding: "10px 16px",
+          padding: "10px 14px",
           display: "flex",
           alignItems: "center",
           gap: 12,
-          flexWrap: "wrap",
         }}
       >
-        <div style={{ marginRight: 8 }}>
+        <div style={{ flexShrink: 0 }}>
           <div style={{ fontSize: 10, letterSpacing: "0.18em", color: "#ff7a1a", fontWeight: 700, marginBottom: 2 }}>
             PRODUCTION OF CASTING
           </div>
@@ -70,19 +76,46 @@ export default function DieCastingStudio() {
             CastCalc
           </div>
         </div>
+
         <div style={{ flex: 1 }} />
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+
+        {/* Desktop: button tabs */}
+        <div className="desktop-tabs" style={{ gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
           {PROCESSES.map((p) => (
             <button
               key={p.id}
               onClick={() => setProcess(p.id)}
-              style={processStyle(process === p.id)}
+              style={tabBtn(process === p.id)}
             >
               {p.label}
-              <span style={labelStyle}>{p.desc}</span>
+              <span style={tabLabel}>{p.desc}</span>
             </button>
           ))}
         </div>
+
+        {/* Mobile: dropdown */}
+        <select
+          className="mobile-select"
+          value={process}
+          onChange={(e) => setProcess(e.target.value as ProcessId)}
+          style={{
+            background: "#1d2026",
+            color: "#e8e6e1",
+            border: "1px solid #2b2f37",
+            borderRadius: 8,
+            padding: "10px 12px",
+            fontSize: 14,
+            fontWeight: 700,
+            width: "100%",
+            maxWidth: 220,
+          }}
+        >
+          {PROCESSES.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.label} — {p.desc}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Process content */}

@@ -191,6 +191,32 @@ const st: Record<string, React.CSSProperties> = {
     fontSize: 12.5,
     cursor: "pointer",
   },
+  btnPrint: {
+    background: "transparent",
+    color: "#b9bec8",
+    border: "1px solid #343943",
+    borderRadius: 7,
+    padding: "8px 16px",
+    fontSize: 12.5,
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+  },
+  table: { width: "100%", borderCollapse: "collapse", marginTop: 10, fontSize: 12.5 },
+  th: {
+    textAlign: "left",
+    color: "#9aa0ab",
+    fontWeight: 600,
+    borderBottom: "1px solid #343943",
+    padding: "6px 6px",
+  },
+  td: {
+    padding: "6px 6px",
+    borderBottom: "1px solid #23262c",
+    fontVariantNumeric: "tabular-nums",
+    color: "#c9cdd5",
+  },
 };
 
 const tabStyle = (on: boolean): React.CSSProperties => ({
@@ -218,118 +244,167 @@ export default function SSMCalc() {
 
   // ════ CALCULATOR TAB ════
   const CalcPage = (
-    <div style={st.grid}>
-      {/* INPUTS */}
-      <div>
-        <h2 style={st.colTitle}>Input variables</h2>
+    <>
+      <div style={st.grid}>
+        {/* INPUTS */}
+        <div className="no-print">
+          <h2 style={st.colTitle}>Input variables</h2>
 
-        <Sec title="Slurry &amp; thermal">
-          <Field label="Target solid fraction" value={inp.solidFraction} onChange={set("solidFraction")} unit="%" />
-          <Field label="Slurry temperature" value={inp.slurryTemp} onChange={set("slurryTemp")} unit="°C" />
-          <Field label="Liquidus temperature" value={inp.liquidusTemp} onChange={set("liquidusTemp")} unit="°C" />
-          <Field label="Solidus temperature" value={inp.solidusTemp} onChange={set("solidusTemp")} unit="°C" />
-          <Field label="Slurry temp entering die, Ti" value={inp.Ti} onChange={set("Ti")} unit="°C" />
-          <Field label="Minimum flow temp, Tf" value={inp.Tf} onChange={set("Tf")} unit="°C" />
-          <Field label="Die surface temp, Td" value={inp.Td} onChange={set("Td")} unit="°C" />
-          <Field label="Conversion factor, Z" value={inp.Z} onChange={set("Z")} unit="°C" />
-        </Sec>
+          <Sec title="Slurry &amp; thermal">
+            <Field label="Target solid fraction" value={inp.solidFraction} onChange={set("solidFraction")} unit="%" />
+            <Field label="Slurry temperature" value={inp.slurryTemp} onChange={set("slurryTemp")} unit="°C" />
+            <Field label="Liquidus temperature" value={inp.liquidusTemp} onChange={set("liquidusTemp")} unit="°C" />
+            <Field label="Solidus temperature" value={inp.solidusTemp} onChange={set("solidusTemp")} unit="°C" />
+            <Field label="Slurry temp entering die, Ti" value={inp.Ti} onChange={set("Ti")} unit="°C" />
+            <Field label="Minimum flow temp, Tf" value={inp.Tf} onChange={set("Tf")} unit="°C" />
+            <Field label="Die surface temp, Td" value={inp.Td} onChange={set("Td")} unit="°C" />
+            <Field label="Conversion factor, Z" value={inp.Z} onChange={set("Z")} unit="°C" />
+          </Sec>
 
-        <Sec title="Machine &amp; shot">
-          <Field label="Plunger diameter, Dp" value={inp.plungerDia} onChange={set("plungerDia")} unit="mm" />
-          <Field label="Shot weight" value={inp.shotWt} onChange={set("shotWt")} unit="g" />
-          <Field label="Alloy density" value={inp.density} onChange={set("density")} unit="g/cc" />
-          <Field label="Number of cavities" value={inp.cavities} onChange={set("cavities")} />
-        </Sec>
+          <Sec title="Machine &amp; shot">
+            <Field label="Plunger diameter, Dp" value={inp.plungerDia} onChange={set("plungerDia")} unit="mm" />
+            <Field label="Shot weight" value={inp.shotWt} onChange={set("shotWt")} unit="g" />
+            <Field label="Alloy density" value={inp.density} onChange={set("density")} unit="g/cc" />
+          </Sec>
 
-        <Sec title="Gating &amp; fill">
-          <Field label="Gate area" value={inp.gateArea} onChange={set("gateArea")} unit="mm²" />
-          <Field label="Gate velocity, Vg" value={inp.gateVelocity} onChange={set("gateVelocity")} unit="m/s" />
-          <Field label="Target fill time" value={inp.fillTime} onChange={set("fillTime")} unit="s" />
-          <Field label="Wall thickness" value={inp.wallThk} onChange={set("wallThk")} unit="mm" />
-          <Field label="Section modulus" value={inp.sectionMod} onChange={set("sectionMod")} unit="mm" />
-        </Sec>
+          <Sec title="Gating &amp; fill">
+            <Field label="Gate area" value={inp.gateArea} onChange={set("gateArea")} unit="mm²" />
+            <Field label="Gate velocity, Vg" value={inp.gateVelocity} onChange={set("gateVelocity")} unit="m/s" />
+            <Field label="Target fill time" value={inp.fillTime} onChange={set("fillTime")} unit="s" />
+            <Field label="Wall thickness" value={inp.wallThk} onChange={set("wallThk")} unit="mm" />
+            <Field label="Section modulus" value={inp.sectionMod} onChange={set("sectionMod")} unit="mm" />
+          </Sec>
 
-        <Sec title="Rheology constants">
-          <Field label="Consistency index, k" value={inp.kShape} onChange={set("kShape")} unit="Pa·s" />
-          <Field label="Max shear rate" value={inp.maxShearRate} onChange={set("maxShearRate")} unit="1/s" />
-        </Sec>
-      </div>
+          <Sec title="Rheology">
+            <Field label="Consistency index, k" value={inp.kShape} onChange={set("kShape")} unit="Pa·s" />
+            <Field label="Max shear rate" value={inp.maxShearRate} onChange={set("maxShearRate")} unit="1/s" />
+          </Sec>
+        </div>
 
-      {/* OUTPUTS */}
-      <div>
-        <h2 style={st.colTitle}>Output parameters</h2>
+        {/* OUTPUTS */}
+        <div>
+          <h2 style={st.colTitle}>Output parameters</h2>
 
-        <Sec title="Process checks">
-          {checks.map((x) => (
-            <div key={x.label} style={st.check}>
-              <span
-                style={{
-                  width: 9,
-                  height: 9,
-                  borderRadius: 99,
-                  background: x.ok ? "#2ecc71" : "#ff5c33",
-                }}
-              />
-              <span style={{ fontSize: 12.5, color: "#d6d9df" }}>{x.label}</span>
-              <span
-                style={{
-                  fontSize: 13.5,
-                  fontWeight: 700,
-                  textAlign: "right" as const,
-                }}
-              >
-                {x.val}
-              </span>
-              <span style={{ gridColumn: "2 / 4", fontSize: 11, color: "#7d838e" }}>
-                {x.rule}
-              </span>
+          <Sec title="Process checks">
+            {checks.map((x) => (
+              <div key={x.label} style={st.check}>
+                <span
+                  style={{
+                    width: 9,
+                    height: 9,
+                    borderRadius: 99,
+                    background: x.ok ? "#2ecc71" : "#ff5c33",
+                  }}
+                />
+                <span style={{ fontSize: 12.5, color: "#d6d9df" }}>{x.label}</span>
+                <span
+                  style={{
+                    fontSize: 13.5,
+                    fontWeight: 700,
+                    textAlign: "right" as const,
+                  }}
+                >
+                  {x.val}
+                </span>
+                <span style={{ gridColumn: "2 / 4", fontSize: 11, color: "#7d838e" }}>
+                  {x.rule}
+                </span>
+              </div>
+            ))}
+            <div
+              style={{
+                marginTop: 10,
+                fontSize: 11,
+                fontWeight: 700,
+                color: allOk ? "#2ecc71" : "#ff5c33",
+              }}
+            >
+              {allOk ? "● All checks pass" : "● Review required — see details above"}
             </div>
-          ))}
-          <div
-            style={{
-              marginTop: 10,
-              fontSize: 11,
-              fontWeight: 700,
-              color: allOk ? "#2ecc71" : "#ff5c33",
-            }}
-          >
-            {allOk ? "● All checks pass" : "● Review required — see details above"}
-          </div>
-        </Sec>
+          </Sec>
 
-        <Sec title="Slurry properties">
-          <Out label="Solid fraction (target)" val={fmt(c.Fs, 1)} unit="%" hi />
-          <Out label="Solid fraction (thermal estimate)" val={fmt(c.FsThermal, 1)} unit="%" />
-          <Out label="Apparent viscosity, η" val={fmt(c.eta, 2)} unit="Pa·s" hi />
-          <Out label="Power-law index, n" val={fmt(c.powerLawN, 3)} unit="" />
-          <Out label="Power-law viscosity" val={fmt(c.etaPowerLaw, 3)} unit="Pa·s" />
-          <Out label="Thixotropic index" val={fmt(c.thixoIndex, 1)} unit="" />
-        </Sec>
+          <Sec title="Slurry properties">
+            <Out label="Solid fraction (target)" val={fmt(c.Fs, 1)} unit="%" hi />
+            <Out label="Solid fraction (thermal estimate)" val={fmt(c.FsThermal, 1)} unit="%" />
+            <Out label="Apparent viscosity, η" val={fmt(c.eta, 2)} unit="Pa·s" hi />
+            <Out label="Power-law index, n" val={fmt(c.powerLawN, 3)} unit="" />
+            <Out label="Power-law viscosity" val={fmt(c.etaPowerLaw, 3)} unit="Pa·s" />
+            <Out label="Thixotropic index" val={fmt(c.thixoIndex, 1)} unit="" />
+          </Sec>
 
-        <Sec title="Fill analysis">
-          <Out label="Flow rate, Q" val={fmt(c.Q, 0)} unit="cc/s" hi />
-          <Out label="Cavity volume" val={fmt(c.cavityVol, 1)} unit="cc" />
-          <Out label="Actual fill time" val={fmt(c.tFillActual, 4)} unit="s" />
-          <Out label="Target fill time" val={fmt(c.tFillTarget, 4)} unit="s" />
-          <Out label="Gate shear rate, γ̇" val={fmt(c.gammaDotGate, 0)} unit="1/s" />
-          <Out label="Reynolds number, Re" val={fmt(c.ReSSM, 2)} unit="" hi />
-          <Out label="Plunger velocity" val={fmt(c.vPlunger, 3)} unit="m/s" />
-        </Sec>
+          <Sec title="Fill analysis">
+            <Out label="Flow rate, Q" val={fmt(c.Q, 0)} unit="cc/s" hi />
+            <Out label="Cavity volume" val={fmt(c.cavityVol, 1)} unit="cc" />
+            <Out label="Actual fill time" val={fmt(c.tFillActual, 4)} unit="s" />
+            <Out label="Target fill time" val={fmt(c.tFillTarget, 4)} unit="s" />
+            <Out label="Gate shear rate, γ̇" val={fmt(c.gammaDotGate, 0)} unit="1/s" />
+            <Out label="Reynolds number, Re" val={fmt(c.ReSSM, 2)} unit="" hi />
+            <Out label="Plunger velocity" val={fmt(c.vPlunger, 3)} unit="m/s" />
+          </Sec>
 
-        <Sec title="Solidification &amp; quality">
-          <Out label="Solidification time" val={fmt(c.tSolid, 4)} unit="s" />
-          <Out label="Theoretical fill time (thermal)" val={fmt(c.tFillTheo, 4)} unit="s" />
-          <Out label="Porosity index" val={fmt(c.porosityIndex, 5)} unit="" hi />
-          <Out label="Fill pressure" val={fmt(c.fillPressure, 2)} unit="kgf/cm²" />
-        </Sec>
+          <Sec title="Solidification &amp; quality">
+            <Out label="Solidification time" val={fmt(c.tSolid, 4)} unit="s" />
+            <Out label="Theoretical fill time (thermal)" val={fmt(c.tFillTheo, 4)} unit="s" />
+            <Out label="Porosity index" val={fmt(c.porosityIndex, 5)} unit="" hi />
+            <Out label="Fill pressure" val={fmt(c.fillPressure, 2)} unit="kgf/cm²" />
+          </Sec>
 
-        <Sec title="Gate geometry">
-          <Out label="Gate thickness" val={fmt(c.gateThickness, 1)} unit="mm" />
-          <Out label="Gate width (estimated)" val={fmt(c.gateWidthEst, 1)} unit="mm" />
-          <Out label="Fill ratio" val={fmt(c.fillRatio, 1)} unit="%" />
-        </Sec>
+          <Sec title="Gate geometry">
+            <Out label="Gate thickness" val={fmt(c.gateThickness, 1)} unit="mm" />
+            <Out label="Gate width (estimated)" val={fmt(c.gateWidthEst, 1)} unit="mm" />
+            <Out label="Fill ratio" val={fmt(c.fillRatio, 1)} unit="%" />
+          </Sec>
+
+          <Sec title="Parameter sheet (for shop floor)">
+            <table style={st.table}>
+              <thead>
+                <tr>
+                  <th style={st.th}>#</th>
+                  <th style={st.th}>Parameter</th>
+                  <th style={st.th}>Units</th>
+                  <th style={st.th}>Design value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(
+                  [
+                    ["Solid fraction", "%", inp.solidFraction],
+                    ["Slurry temperature", "°C", inp.slurryTemp],
+                    ["Liquidus temperature", "°C", inp.liquidusTemp],
+                    ["Solidus temperature", "°C", inp.solidusTemp],
+                    ["Slurry temp entering die, Ti", "°C", inp.Ti],
+                    ["Die surface temp, Td", "°C", inp.Td],
+                    ["Plunger diameter", "mm", inp.plungerDia],
+                    ["Shot weight", "g", inp.shotWt],
+                    ["Alloy density", "g/cc", inp.density],
+                    ["Gate area", "mm²", inp.gateArea],
+                    ["Gate velocity", "m/s", inp.gateVelocity],
+                    ["Fill time", "s", inp.fillTime],
+                    ["Wall thickness", "mm", inp.wallThk],
+                    ["Apparent viscosity", "Pa·s", fmt(c.eta, 2)],
+                    ["Flow rate", "cc/s", fmt(c.Q, 0)],
+                    ["Actual fill time", "s", fmt(c.tFillActual, 4)],
+                    ["Reynolds number", "", fmt(c.ReSSM, 2)],
+                    ["Solidification time", "s", fmt(c.tSolid, 4)],
+                    ["Porosity index", "", fmt(c.porosityIndex, 5)],
+                    ["Fill pressure", "kgf/cm²", fmt(c.fillPressure, 2)],
+                    ["Gate thickness", "mm", fmt(c.gateThickness, 1)],
+                    ["Gate width", "mm", fmt(c.gateWidthEst, 1)],
+                  ] as [string, string, string][]
+                ).map((row, i) => (
+                  <tr key={i}>
+                    <td style={st.td}>{i + 1}</td>
+                    <td style={st.td}>{row[0]}</td>
+                    <td style={st.td}>{row[1]}</td>
+                    <td style={{ ...st.td, fontWeight: 600 }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Sec>
+        </div>
       </div>
-    </div>
+    </>
   );
 
   // ════ DOCUMENTATION TAB ════
@@ -385,25 +460,51 @@ export default function SSMCalc() {
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
         input:focus, select:focus, button:focus { outline: 2px solid #ff7a1a; outline-offset: 1px; }
         @media (max-width: 880px){ .ssm-grid{ grid-template-columns: 1fr !important; } }
+        @media print {
+          @page { size: A4; margin: 12mm 14mm; }
+          * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          html, body, body > div, body > div > div {
+            background: #fff !important; color: #111 !important;
+          }
+          .no-print { display: none !important; }
+          section, [style*="background:#1d"], [style*="background: #1d"],
+          [style*="background:#10"], [style*="background: #10"],
+          [style*="background:#14"], [style*="background: #14"] {
+            background: #fff !important; border-color: #ddd !important; box-shadow: none !important;
+          }
+          div[style*="color:#e8e6e1"], span[style*="color:#e8e6e1"],
+          span[style*="color:#b9bec8"], span[style*="color: #b9bec8"],
+          span[style*="color:#c9cdd5"], span[style*="color: #c9cdd5"],
+          span[style*="color:#d6d9df"], span[style*="color: #d6d9df"],
+          p[style*="color:#c9cdd5"], p[style*="color: #c9cdd5"] {
+            color: #222 !important;
+          }
+          a { color: #0056b3 !important; }
+        }
       `}</style>
 
       <header style={st.header}>
         <div>
-          <div style={st.eyebrow}>SSM / RHEOCASTING · PROCESS DESIGN</div>
-          <h1 style={st.h1}>Semi-Solid Metal Casting</h1>
+          <div style={st.eyebrow}>PRODUCTION OF CASTING · SSM</div>
+          <h1 style={st.h1}>Semi-Solid / Rheocasting</h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           {tab === "calc" && (
-            <div
-              style={{
-                ...st.statusPill,
-                background: allOk ? "#123d22" : "#46190f",
-                borderColor: allOk ? "#2ecc71" : "#ff5c33",
-                color: allOk ? "#7af2ae" : "#ffb09a",
-              }}
-            >
-              {allOk ? "● ALL CHECKS PASS" : "● REVIEW REQUIRED"}
-            </div>
+            <>
+              <div
+                style={{
+                  ...st.statusPill,
+                  background: allOk ? "#123d22" : "#46190f",
+                  borderColor: allOk ? "#2ecc71" : "#ff5c33",
+                  color: allOk ? "#7af2ae" : "#ffb09a",
+                }}
+              >
+                {allOk ? "● ALL CHECKS PASS" : "● REVIEW REQUIRED"}
+              </div>
+              <button style={st.btnPrint} onClick={() => window.print()} title="Print calculator">
+                🖨 Print
+              </button>
+            </>
           )}
         </div>
       </header>

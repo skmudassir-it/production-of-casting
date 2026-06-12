@@ -191,6 +191,32 @@ const st: Record<string, React.CSSProperties> = {
     fontSize: 12.5,
     cursor: "pointer",
   },
+  btnPrint: {
+    background: "transparent",
+    color: "#b9bec8",
+    border: "1px solid #343943",
+    borderRadius: 7,
+    padding: "8px 16px",
+    fontSize: 12.5,
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+  },
+  table: { width: "100%", borderCollapse: "collapse", marginTop: 10, fontSize: 12.5 },
+  th: {
+    textAlign: "left",
+    color: "#9aa0ab",
+    fontWeight: 600,
+    borderBottom: "1px solid #343943",
+    padding: "6px 6px",
+  },
+  td: {
+    padding: "6px 6px",
+    borderBottom: "1px solid #23262c",
+    fontVariantNumeric: "tabular-nums",
+    color: "#c9cdd5",
+  },
 };
 
 const tabStyle = (on: boolean): React.CSSProperties => ({
@@ -218,120 +244,169 @@ export default function VacuumCalc() {
 
   // ════ CALCULATOR TAB ════
   const CalcPage = (
-    <div style={st.grid}>
-      {/* INPUTS */}
-      <div>
-        <h2 style={st.colTitle}>Input variables</h2>
+    <>
+      <div style={st.grid}>
+        {/* INPUTS */}
+        <div className="no-print">
+          <h2 style={st.colTitle}>Input variables</h2>
 
-        <Sec title="Vacuum system">
-          <Field label="Target vacuum level" value={inp.vacuumLevel} onChange={set("vacuumLevel")} unit="mbar" />
-          <Field label="Cavity volume" value={inp.cavityVolume} onChange={set("cavityVolume")} unit="cc" />
-          <Field label="Vent area" value={inp.ventArea} onChange={set("ventArea")} unit="mm²" />
-          <Field label="Vacuum pump speed" value={inp.pumpSpeed} onChange={set("pumpSpeed")} unit="m³/h" />
-          <Field label="Target evacuation time" value={inp.evacuationTime} onChange={set("evacuationTime")} unit="ms" />
-        </Sec>
+          <Sec title="Vacuum system">
+            <Field label="Target vacuum level" value={inp.vacuumLevel} onChange={set("vacuumLevel")} unit="mbar" />
+            <Field label="Cavity volume" value={inp.cavityVolume} onChange={set("cavityVolume")} unit="cc" />
+            <Field label="Vent area" value={inp.ventArea} onChange={set("ventArea")} unit="mm²" />
+            <Field label="Vacuum pump speed" value={inp.pumpSpeed} onChange={set("pumpSpeed")} unit="m³/h" />
+            <Field label="Target evacuation time" value={inp.evacuationTime} onChange={set("evacuationTime")} unit="ms" />
+          </Sec>
 
-        <Sec title="Casting &amp; shot">
-          <Field label="Plunger diameter, Dp" value={inp.plungerDia} onChange={set("plungerDia")} unit="mm" />
-          <Field label="Shot weight" value={inp.shotWt} onChange={set("shotWt")} unit="g" />
-          <Field label="Alloy density" value={inp.density} onChange={set("density")} unit="g/cc" />
-          <Field label="Target gate velocity, Vg" value={inp.gateVelocity} onChange={set("gateVelocity")} unit="m/s" />
-          <Field label="Target fill time" value={inp.fillTime} onChange={set("fillTime")} unit="ms" />
-          <Field label="Coefficient of discharge, Cd" value={inp.Cd_discharge} onChange={set("Cd_discharge")} />
-          <Field label="Wall thickness" value={inp.wallThk} onChange={set("wallThk")} unit="mm" />
-        </Sec>
+          <Sec title="Casting &amp; shot">
+            <Field label="Plunger diameter, Dp" value={inp.plungerDia} onChange={set("plungerDia")} unit="mm" />
+            <Field label="Shot weight" value={inp.shotWt} onChange={set("shotWt")} unit="g" />
+            <Field label="Alloy density" value={inp.density} onChange={set("density")} unit="g/cc" />
+            <Field label="Target gate velocity, Vg" value={inp.gateVelocity} onChange={set("gateVelocity")} unit="m/s" />
+            <Field label="Target fill time" value={inp.fillTime} onChange={set("fillTime")} unit="ms" />
+            <Field label="Coefficient of discharge, Cd" value={inp.Cd_discharge} onChange={set("Cd_discharge")} />
+          </Sec>
 
-        <Sec title="Thermal constants &amp; alloy">
-          <Field label="Melt temp entering die, Ti" value={inp.Ti} onChange={set("Ti")} unit="°C" />
-          <Field label="Minimum flow temp, Tf" value={inp.Tf} onChange={set("Tf")} unit="°C" />
-          <Field label="Die surface temp, Td" value={inp.Td} onChange={set("Td")} unit="°C" />
-          <Field label="Empirical constant, k" value={inp.k} onChange={set("k")} unit="s/cm" />
-          <Field label="Solid fraction at end of fill, S" value={inp.S} onChange={set("S")} unit="%" />
-          <Field label="Conversion factor, Z" value={inp.Z} onChange={set("Z")} unit="°C" />
-        </Sec>
-      </div>
+          <Sec title="Thermal constants &amp; alloy">
+            <Field label="Melt temp entering die, Ti" value={inp.Ti} onChange={set("Ti")} unit="°C" />
+            <Field label="Minimum flow temp, Tf" value={inp.Tf} onChange={set("Tf")} unit="°C" />
+            <Field label="Die surface temp, Td" value={inp.Td} onChange={set("Td")} unit="°C" />
+            <Field label="Wall thickness" value={inp.wallThk} onChange={set("wallThk")} unit="mm" />
+            <Field label="Empirical constant, k" value={inp.k} onChange={set("k")} unit="s/cm" />
+            <Field label="Solid fraction at end of fill, S" value={inp.S} onChange={set("S")} unit="%" />
+            <Field label="Conversion factor, Z" value={inp.Z} onChange={set("Z")} unit="°C" />
+          </Sec>
+        </div>
 
-      {/* OUTPUTS */}
-      <div>
-        <h2 style={st.colTitle}>Output parameters</h2>
+        {/* OUTPUTS */}
+        <div>
+          <h2 style={st.colTitle}>Output parameters</h2>
 
-        <Sec title="Process checks">
-          {checks.map((x) => (
-            <div key={x.label} style={st.check}>
-              <span
-                style={{
-                  width: 9,
-                  height: 9,
-                  borderRadius: 99,
-                  background: x.ok ? "#2ecc71" : "#ff5c33",
-                }}
-              />
-              <span style={{ fontSize: 12.5, color: "#d6d9df" }}>{x.label}</span>
-              <span
-                style={{
-                  fontSize: 13.5,
-                  fontWeight: 700,
-                  textAlign: "right" as const,
-                }}
-              >
-                {x.val}
-              </span>
-              <span style={{ gridColumn: "2 / 4", fontSize: 11, color: "#7d838e" }}>
-                {x.rule}
-              </span>
-              <span
-                style={{
-                  gridColumn: "2 / 4",
-                  fontSize: 11,
-                  color: x.ok ? "#5fa88b" : "#e0886d",
-                }}
-              >
-                {x.detail}
-              </span>
+          <Sec title="Process checks">
+            {checks.map((x) => (
+              <div key={x.label} style={st.check}>
+                <span
+                  style={{
+                    width: 9,
+                    height: 9,
+                    borderRadius: 99,
+                    background: x.ok ? "#2ecc71" : "#ff5c33",
+                  }}
+                />
+                <span style={{ fontSize: 12.5, color: "#d6d9df" }}>{x.label}</span>
+                <span
+                  style={{
+                    fontSize: 13.5,
+                    fontWeight: 700,
+                    textAlign: "right" as const,
+                  }}
+                >
+                  {x.val}
+                </span>
+                <span style={{ gridColumn: "2 / 4", fontSize: 11, color: "#7d838e" }}>
+                  {x.rule}
+                </span>
+                <span
+                  style={{
+                    gridColumn: "2 / 4",
+                    fontSize: 11,
+                    color: x.ok ? "#5fa88b" : "#e0886d",
+                  }}
+                >
+                  {x.detail}
+                </span>
+              </div>
+            ))}
+            <div
+              style={{
+                marginTop: 10,
+                fontSize: 11,
+                fontWeight: 700,
+                color: allOk ? "#2ecc71" : "#ff5c33",
+              }}
+            >
+              {allOk ? "● All checks pass" : "● Review required — see details above"}
             </div>
-          ))}
-          <div
-            style={{
-              marginTop: 10,
-              fontSize: 11,
-              fontWeight: 700,
-              color: allOk ? "#2ecc71" : "#ff5c33",
-            }}
-          >
-            {allOk ? "● All checks pass" : "● Review required — see details above"}
-          </div>
-        </Sec>
+          </Sec>
 
-        <Sec title="Air &amp; vacuum results">
-          <Out label="Residual air mass" val={fmt(c.m_air, 4)} unit="mg" />
-          <Out label="Initial air mass (atmospheric)" val={fmt(c.m_air_initial, 2)} unit="mg" />
-          <Out label="Air removal efficiency" val={fmt(c.airRemovalEff, 1)} unit="%" hi />
-          <Out label="Theoretical evacuation time" val={fmt(c.t_evac_theo, 1)} unit="ms" />
-          <Out label="Porosity index" val={fmt(c.porosityIndex, 4)} unit="mg/g" hi />
-          <Out label="Air volume in cavity" val={fmt(c.V_air, 1)} unit="mm³" />
-          <Out label="Porosity volume fraction" val={fmt(c.f_porosity, 3)} unit="%" />
-        </Sec>
+          <Sec title="Air &amp; vacuum results">
+            <Out label="Residual air mass" val={fmt(c.m_air, 4)} unit="mg" />
+            <Out label="Initial air mass (atmospheric)" val={fmt(c.m_air_initial, 2)} unit="mg" />
+            <Out label="Air removal efficiency" val={fmt(c.airRemovalEff, 1)} unit="%" hi />
+            <Out label="Theoretical evacuation time" val={fmt(c.t_evac_theo, 1)} unit="ms" />
+            <Out label="Porosity index" val={fmt(c.porosityIndex, 4)} unit="mg/g" hi />
+            <Out label="Air volume in cavity" val={fmt(c.V_air, 1)} unit="mm³" />
+            <Out label="Porosity volume fraction" val={fmt(c.f_porosity, 3)} unit="%" />
+          </Sec>
 
-        <Sec title="Fill &amp; gating">
-          <Out label="Theoretical fill time" val={fmt(c.tFillTheo, 3)} unit="s" />
-          <Out label="Shot volume" val={fmt(c.shotVol, 1)} unit="cc" />
-          <Out label="Gate area" val={fmt(c.A_gate, 1)} unit="mm²" hi />
-          <Out label="Actual gate velocity" val={fmt(c.Vg_actual, 1)} unit="m/s" />
-          <Out label="Fill rate" val={fmt(c.fillRate, 0)} unit="cc/s" />
-          <Out label="Gate fill rate" val={fmt(c.gateFillRate, 0)} unit="cc/s" />
-        </Sec>
+          <Sec title="Fill &amp; gating">
+            <Out label="Theoretical fill time" val={fmt(c.tFillTheo, 3)} unit="s" />
+            <Out label="Shot volume" val={fmt(c.shotVol, 1)} unit="cc" />
+            <Out label="Gate area" val={fmt(c.A_gate, 1)} unit="mm²" hi />
+            <Out label="Actual gate velocity" val={fmt(c.Vg_actual, 1)} unit="m/s" />
+            <Out label="Fill rate" val={fmt(c.fillRate, 0)} unit="cc/s" />
+            <Out label="Gate fill rate" val={fmt(c.gateFillRate, 0)} unit="cc/s" />
+          </Sec>
 
-        <Sec title="Metal pressure &amp; plunger">
-          <Out label="Metal pressure" val={fmt(c.metalP, 2)} unit="kgf/cm²" />
-          <Out label="Plunger area" val={fmt(c.A_plunger, 0)} unit="mm²" />
-          <Out label="Plunger velocity" val={fmt(c.plungerVel, 2)} unit="m/s" hi />
-        </Sec>
+          <Sec title="Metal pressure &amp; plunger">
+            <Out label="Metal pressure" val={fmt(c.metalP, 2)} unit="kgf/cm²" />
+            <Out label="Plunger area" val={fmt(c.A_plunger, 0)} unit="mm²" />
+            <Out label="Plunger velocity" val={fmt(c.plungerVel, 2)} unit="m/s" hi />
+          </Sec>
+
+          <Sec title="Parameter sheet (for shop floor)">
+            <table style={st.table}>
+              <thead>
+                <tr>
+                  <th style={st.th}>#</th>
+                  <th style={st.th}>Parameter</th>
+                  <th style={st.th}>Units</th>
+                  <th style={st.th}>Design value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(
+                  [
+                    ["Target vacuum level", "mbar", inp.vacuumLevel],
+                    ["Cavity volume", "cc", inp.cavityVolume],
+                    ["Vent area", "mm²", inp.ventArea],
+                    ["Vacuum pump speed", "m³/h", inp.pumpSpeed],
+                    ["Evacuation time", "ms", inp.evacuationTime],
+                    ["Plunger diameter", "mm", inp.plungerDia],
+                    ["Shot weight", "g", inp.shotWt],
+                    ["Alloy density", "g/cc", inp.density],
+                    ["Gate velocity", "m/s", inp.gateVelocity],
+                    ["Fill time", "ms", inp.fillTime],
+                    ["Coefficient of discharge, Cd", "", inp.Cd_discharge],
+                    ["Melt temperature, Ti", "°C", inp.Ti],
+                    ["Minimum flow temp, Tf", "°C", inp.Tf],
+                    ["Die surface temp, Td", "°C", inp.Td],
+                    ["Wall thickness", "mm", inp.wallThk],
+                    ["Gate area", "mm²", fmt(c.A_gate, 1)],
+                    ["Plunger velocity", "m/s", fmt(c.plungerVel, 2)],
+                    ["Metal pressure", "kgf/cm²", fmt(c.metalP, 2)],
+                    ["Fill rate", "cc/s", fmt(c.fillRate, 0)],
+                    ["Residual air mass", "mg", fmt(c.m_air, 4)],
+                    ["Air removal efficiency", "%", fmt(c.airRemovalEff, 1)],
+                    ["Porosity index", "mg/g", fmt(c.porosityIndex, 4)],
+                  ] as [string, string, string][]
+                ).map((row, i) => (
+                  <tr key={i}>
+                    <td style={st.td}>{i + 1}</td>
+                    <td style={st.td}>{row[0]}</td>
+                    <td style={st.td}>{row[1]}</td>
+                    <td style={{ ...st.td, fontWeight: 600 }}>{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Sec>
+        </div>
       </div>
-    </div>
+    </>
   );
 
   // ════ DOCUMENTATION TAB ════
-  // Render markdown as styled HTML text
   const renderDoc = (md: string) => {
     const lines = md.trim().split("\n");
     const elements: React.ReactNode[] = [];
@@ -341,13 +416,11 @@ export default function VacuumCalc() {
     while (i < lines.length) {
       const line = lines[i];
 
-      // Skip empty leading/trailing
       if (line.trim() === "" && i < 5) {
         i++;
         continue;
       }
 
-      // ### Header
       if (line.match(/^###\s/)) {
         elements.push(
           <h3 key={key++} style={st.docH}>
@@ -358,7 +431,6 @@ export default function VacuumCalc() {
         continue;
       }
 
-      // ## Header
       if (line.match(/^##\s/)) {
         elements.push(
           <h2 key={key++} style={{ ...st.colTitle, marginTop: 24 }}>
@@ -369,7 +441,6 @@ export default function VacuumCalc() {
         continue;
       }
 
-      // Code block fence
       if (line.trim().startsWith("```")) {
         const codeLines: string[] = [];
         i++;
@@ -377,7 +448,7 @@ export default function VacuumCalc() {
           codeLines.push(lines[i]);
           i++;
         }
-        i++; // skip closing ```
+        i++;
         elements.push(
           <code key={key++} style={st.formula}>
             {codeLines.join("\n")}
@@ -386,20 +457,18 @@ export default function VacuumCalc() {
         continue;
       }
 
-      // Pipe table line
       if (line.trim().startsWith("|")) {
         const tableLines: string[] = [];
         while (i < lines.length && lines[i].trim().startsWith("|")) {
           tableLines.push(lines[i]);
           i++;
         }
-        // Render table as styled divs
         if (tableLines.length >= 2) {
           const headerCells = tableLines[0]
             .split("|")
             .filter(Boolean)
             .map((c) => c.trim());
-          const bodyRows = tableLines.slice(2); // skip separator
+          const bodyRows = tableLines.slice(2);
           elements.push(
             <div key={key++} style={{ overflowX: "auto", margin: "12px 0" }}>
               <table
@@ -458,7 +527,6 @@ export default function VacuumCalc() {
         continue;
       }
 
-      // Regular paragraph (collect consecutive non-special lines)
       const paraLines: string[] = [];
       while (
         i < lines.length &&
@@ -480,7 +548,7 @@ export default function VacuumCalc() {
           );
         }
       } else {
-        i++; // skip empty line
+        i++;
       }
     }
     return elements;
@@ -513,25 +581,51 @@ export default function VacuumCalc() {
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
         input:focus, select:focus, button:focus { outline: 2px solid #ff7a1a; outline-offset: 1px; }
         @media (max-width: 880px){ .vac-grid{ grid-template-columns: 1fr !important; } }
+        @media print {
+          @page { size: A4; margin: 12mm 14mm; }
+          * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          html, body, body > div, body > div > div {
+            background: #fff !important; color: #111 !important;
+          }
+          .no-print { display: none !important; }
+          section, [style*="background:#1d"], [style*="background: #1d"],
+          [style*="background:#10"], [style*="background: #10"],
+          [style*="background:#14"], [style*="background: #14"] {
+            background: #fff !important; border-color: #ddd !important; box-shadow: none !important;
+          }
+          div[style*="color:#e8e6e1"], span[style*="color:#e8e6e1"],
+          span[style*="color:#b9bec8"], span[style*="color: #b9bec8"],
+          span[style*="color:#c9cdd5"], span[style*="color: #c9cdd5"],
+          span[style*="color:#d6d9df"], span[style*="color: #d6d9df"],
+          p[style*="color:#c9cdd5"], p[style*="color: #c9cdd5"] {
+            color: #222 !important;
+          }
+          a { color: #0056b3 !important; }
+        }
       `}</style>
 
       <header style={st.header}>
         <div>
-          <div style={st.eyebrow}>VACUUM HPDC · PROCESS DESIGN</div>
+          <div style={st.eyebrow}>PRODUCTION OF CASTING · VACUUM HPDC</div>
           <h1 style={st.h1}>Vacuum-Assisted HPDC</h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           {tab === "calc" && (
-            <div
-              style={{
-                ...st.statusPill,
-                background: allOk ? "#123d22" : "#46190f",
-                borderColor: allOk ? "#2ecc71" : "#ff5c33",
-                color: allOk ? "#7af2ae" : "#ffb09a",
-              }}
-            >
-              {allOk ? "● ALL CHECKS PASS" : "● REVIEW REQUIRED"}
-            </div>
+            <>
+              <div
+                style={{
+                  ...st.statusPill,
+                  background: allOk ? "#123d22" : "#46190f",
+                  borderColor: allOk ? "#2ecc71" : "#ff5c33",
+                  color: allOk ? "#7af2ae" : "#ffb09a",
+                }}
+              >
+                {allOk ? "● ALL CHECKS PASS" : "● REVIEW REQUIRED"}
+              </div>
+              <button style={st.btnPrint} onClick={() => window.print()} title="Print calculator">
+                🖨 Print
+              </button>
+            </>
           )}
         </div>
       </header>
