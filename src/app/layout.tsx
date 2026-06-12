@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PQ² Shot & Gating Calculator | HPDC Process Design",
-  description: "HPDC process design calculator — shot weight, fill time, gate parameters, machine tonnage, and PQ² analysis for die casting machines.",
+  title: "CastCalc — Die Casting Process Design Studio | HPDC · LPDC · GDC · Vacuum · Squeeze · SSM",
+  description: "Complete die casting process design tools for HPDC, LPDC, GDC, Vacuum HPDC, Squeeze Casting, and Semi-Solid / Rheocasting. PQ² diagrams, shot profiles, gate sizing, solidification analysis.",
 };
 
 export default function RootLayout({

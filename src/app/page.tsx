@@ -1,5 +1,5 @@
-import PQ2App from "@/components/PQ2Calculator";
+import DieCastingStudio from "@/components/DieCastingStudio";
 
 export default function Home() {
-  return <PQ2App />;
+  return <DieCastingStudio />;
 }
