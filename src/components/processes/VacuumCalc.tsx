@@ -245,7 +245,7 @@ export default function VacuumCalc() {
   // ════ CALCULATOR TAB ════
   const CalcPage = (
     <>
-      <div style={st.grid}>
+      <div className="vacuum-grid" style={st.grid}>
         {/* INPUTS */}
         <div className="no-print">
           <h2 style={st.colTitle}>Input variables</h2>

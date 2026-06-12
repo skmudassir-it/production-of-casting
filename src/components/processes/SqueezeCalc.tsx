@@ -245,7 +245,7 @@ export default function SqueezeCalc() {
   // ════ CALCULATOR TAB ════
   const CalcPage = (
     <>
-      <div style={st.grid}>
+      <div className="squeeze-grid" style={st.grid}>
         {/* INPUTS */}
         <div className="no-print">
           <h2 style={st.colTitle}>Input variables</h2>
