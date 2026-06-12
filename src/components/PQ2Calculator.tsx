@@ -330,7 +330,7 @@ export default function PQ2App() {
 
       <div className="pq2-grid" style={st.grid}>
         {/* INPUTS */}
-        <div>
+        <div className="no-print">
           <h2 style={st.colTitle}>Input variables</h2>
           <Sec title="Machine">
             <label style={st.field}>
@@ -452,6 +452,23 @@ export default function PQ2App() {
 
         {/* OUTPUTS */}
         <div>
+          {/* Print-only report header */}
+          <div className="print-only" style={{ display: "none", borderBottom: "2px solid #333", paddingBottom: 12, marginBottom: 18 }}>
+            <div style={{ fontSize: 11, color: "#888", letterSpacing: "0.1em", marginBottom: 4 }}>PQ² PROCESS DESIGN REPORT</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <h1 style={{ fontSize: 18, fontWeight: 800, color: "#111", margin: 0 }}>{inp.partNumber} — {inp.partName}</h1>
+                <div style={{ fontSize: 11, color: "#555", marginTop: 4 }}>
+                  Machine: {c.m.name} · Alloy: {inp.alloy} · Cavities: {inp.cavities} · Plunger Ø: {inp.Dp} mm
+                  {inp.customer ? ` · Customer: ${inp.customer}` : ""}
+                </div>
+              </div>
+              <div style={{ textAlign: "right", fontSize: 10, color: "#888" }}>
+                {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+              </div>
+            </div>
+          </div>
+
           <h2 style={st.colTitle}>Output parameters</h2>
           <Sec title="Process checks">
             {checks.map((x) => (
@@ -465,10 +482,12 @@ export default function PQ2App() {
           </Sec>
 
           <Sec title="PQ² diagram">
+            <div className="pq2-chart-section">
             <PQ2Chart chart={c.chart} />
             <div style={{ fontSize: 11.5, color: "#9aa0ab", marginTop: 8 }}>
               The yellow operating point must sit under the blue machine power line, on the orange die line,
               and between the green (min) and red (max) gate-velocity pressure limits.
+            </div>
             </div>
           </Sec>
 
@@ -533,6 +552,7 @@ export default function PQ2App() {
             </table>
           </Sec>
 
+          <div className="parameter-sheet">
           <Sec title="Parameter sheet (for shop floor)">
             <table style={st.table}>
               <thead><tr><th style={st.th}>#</th><th style={st.th}>Parameter</th><th style={st.th}>Units</th><th style={st.th}>Design value</th></tr></thead>
@@ -571,6 +591,7 @@ export default function PQ2App() {
               Same layout as the workbook&apos;s &quot;Parameter Sheet&quot;. Actual machine-trial values (solidification time, spray time, water flow rates) are recorded at the press.
             </div>
           </Sec>
+          </div>
         </div>
       </div>
     </>
@@ -710,6 +731,25 @@ export default function PQ2App() {
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
         input:focus, select:focus, button:focus { outline: 2px solid #ff7a1a; outline-offset: 1px; }
         @media (max-width: 880px){ .pq2-grid{ grid-template-columns: 1fr !important; } }
+        @media print {
+          @page { size: A4; margin: 12mm 14mm; }
+          body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .no-print { display: none !important; }
+          .print-only { display: block !important; }
+          .pq2-grid { grid-template-columns: 1fr !important; display: block !important; }
+          .pq2-grid > div:first-child { display: none !important; }
+          .pq2-grid > div { break-inside: avoid; }
+          .print-report { background: #fff !important; color: #111 !important; }
+          .print-report h1 { color: #111 !important; font-size: 20px !important; }
+          .print-report h2 { color: #333 !important; border-bottom-color: #ff7a1a !important; }
+          .print-report h3 { color: #555 !important; }
+          .print-report section { background: #fff !important; border-color: #ddd !important; box-shadow: none !important; }
+          .print-report table { font-size: 10px !important; }
+          .print-report th, .print-report td { border-color: #ccc !important; color: #222 !important; padding: 4px !important; }
+          .print-report .pq2-chart-section { break-inside: avoid; page-break-before: auto; }
+          .print-report .parameter-sheet { break-before: page; }
+          .print-report footer, .print-report .credit-line { color: #888 !important; }
+        }
       `}</style>
 
       <header style={st.header}>
@@ -717,20 +757,31 @@ export default function PQ2App() {
           <div style={st.eyebrow}>HPDC PROCESS DESIGN · PQ² CALCULATION</div>
           <h1 style={st.h1}>Shot &amp; Gating Studio</h1>
         </div>
-        {tab === "calc" && (
-          <div style={{ ...st.statusPill, background: allOk ? "#123d22" : "#46190f", borderColor: allOk ? "#2ecc71" : "#ff5c33", color: allOk ? "#7af2ae" : "#ffb09a" }}>
-            {allOk ? "● ALL CHECKS PASS" : "● REVIEW REQUIRED"}
-          </div>
-        )}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          {tab === "calc" && (
+            <>
+              <button
+                onClick={() => window.print()}
+                className="no-print"
+                style={{ ...st.btnGhost, display: "flex", alignItems: "center", gap: 6, fontSize: 13 }}
+              >
+                🖨 Print Report
+              </button>
+              <div style={{ ...st.statusPill, background: allOk ? "#123d22" : "#46190f", borderColor: allOk ? "#2ecc71" : "#ff5c33", color: allOk ? "#7af2ae" : "#ffb09a" }}>
+                {allOk ? "● ALL CHECKS PASS" : "● REVIEW REQUIRED"}
+              </div>
+            </>
+          )}
+        </div>
       </header>
 
-      <nav style={st.tabs}>
+      <nav style={st.tabs} className="no-print">
         <button style={tabStyle(tab === "calc")} onClick={() => setTab("calc")}>Calculator</button>
         <button style={tabStyle(tab === "doc")} onClick={() => setTab("doc")}>Documentation</button>
         <button style={tabStyle(tab === "faq")} onClick={() => setTab("faq")}>FAQ</button>
       </nav>
 
-      {tab === "calc" ? CalcPage : tab === "doc" ? DocPage : FaqPage}
+      {tab === "calc" ? <div className="print-report">{CalcPage}</div> : tab === "doc" ? DocPage : FaqPage}
 
       <footer style={st.footer}>
         PQ² process design · formulas replicated 1:1 from the source worksheet, including the hidden PQ² graph engine
