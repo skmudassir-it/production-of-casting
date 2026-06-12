@@ -733,22 +733,34 @@ export default function PQ2App() {
         @media (max-width: 880px){ .pq2-grid{ grid-template-columns: 1fr !important; } }
         @media print {
           @page { size: A4; margin: 12mm 14mm; }
-          body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          html, body, body > div, body > div > div {
+            background: #fff !important; color: #111 !important;
+          }
           .no-print { display: none !important; }
           .print-only { display: block !important; }
           .pq2-grid { grid-template-columns: 1fr !important; display: block !important; }
           .pq2-grid > div:first-child { display: none !important; }
           .pq2-grid > div { break-inside: avoid; }
-          .print-report { background: #fff !important; color: #111 !important; }
-          .print-report h1 { color: #111 !important; font-size: 20px !important; }
-          .print-report h2 { color: #333 !important; border-bottom-color: #ff7a1a !important; }
-          .print-report h3 { color: #555 !important; }
-          .print-report section { background: #fff !important; border-color: #ddd !important; box-shadow: none !important; }
+          section, [style*="background:#1d"], [style*="background: #1d"],
+          [style*="background:#10"], [style*="background: #10"],
+          [style*="background:#14"], [style*="background: #14"] {
+            background: #fff !important; border-color: #ddd !important; box-shadow: none !important;
+          }
+          div[style*="color:#e8e6e1"], span[style*="color:#e8e6e1"],
+          span[style*="color:#b9bec8"], span[style*="color: #b9bec8"],
+          span[style*="color:#c9cdd5"], span[style*="color: #c9cdd5"],
+          span[style*="color:#d6d9df"], span[style*="color: #d6d9df"],
+          p[style*="color:#c9cdd5"], p[style*="color: #c9cdd5"] {
+            color: #222 !important;
+          }
+          a { color: #0056b3 !important; }
           .print-report table { font-size: 10px !important; }
           .print-report th, .print-report td { border-color: #ccc !important; color: #222 !important; padding: 4px !important; }
           .print-report .pq2-chart-section { break-inside: avoid; page-break-before: auto; }
           .print-report .parameter-sheet { break-before: page; }
           .print-report footer, .print-report .credit-line { color: #888 !important; }
+          footer[style*="color:#6e7480"] { color: #888 !important; }
         }
       `}</style>
 
