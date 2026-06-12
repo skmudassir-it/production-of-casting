@@ -44,13 +44,20 @@ export default function DieCastingStudio() {
   const [process, setProcess] = useState<ProcessId>("hpdc");
 
   return (
-    <div style={{ minHeight: "100vh", background: "#15171b" }}>
+    <div style={{ minHeight: "100vh", background: "#15171b", overflowX: "hidden", maxWidth: "100vw" }}>
       <style>{`
+        *, *::before, *::after { box-sizing: border-box; }
+        img, svg, table, pre, code, input, select, button { max-width: 100%; }
         .desktop-tabs { display: flex; }
         .mobile-select { display: none; }
         @media (max-width: 700px) {
           .desktop-tabs { display: none !important; }
           .mobile-select { display: block !important; }
+        }
+        @media (max-width: 860px) {
+          .pq2-grid, .lpdc-grid, .gdc-grid, .vacuum-grid, .squeeze-grid, .ssm-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
       `}</style>
 
