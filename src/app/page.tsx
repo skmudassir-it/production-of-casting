@@ -1,5 +1,5 @@
-import PQ2Calculator from "@/components/PQ2Calculator";
+import PQ2App from "@/components/PQ2Calculator";
 
 export default function Home() {
-  return <PQ2Calculator />;
+  return <PQ2App />;
 }
