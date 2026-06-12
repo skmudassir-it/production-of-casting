@@ -64,7 +64,7 @@ export default function DieCastingStudio() {
       >
         <div style={{ marginRight: 8 }}>
           <div style={{ fontSize: 10, letterSpacing: "0.18em", color: "#ff7a1a", fontWeight: 700, marginBottom: 2 }}>
-            DIE CASTING PROCESS STUDIO
+            PRODUCTION OF CASTING
           </div>
           <div style={{ fontSize: 18, fontWeight: 800, color: "#e8e6e1", lineHeight: 1 }}>
             CastCalc

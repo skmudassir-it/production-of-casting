@@ -766,7 +766,7 @@ export default function PQ2App() {
 
       <header style={st.header}>
         <div>
-          <div style={st.eyebrow}>HPDC PROCESS DESIGN · PQ² CALCULATION</div>
+          <div style={st.eyebrow}>PRODUCTION OF CASTING · HPDC</div>
           <h1 style={st.h1}>Shot &amp; Gating Studio</h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>

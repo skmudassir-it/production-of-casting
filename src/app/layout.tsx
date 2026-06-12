@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CastCalc — Die Casting Process Design Studio | HPDC · LPDC · GDC · Vacuum · Squeeze · SSM",
+  title: "Production of Casting — Die Casting Process Design Studio | HPDC · LPDC · GDC · Vacuum · Squeeze · SSM",
   description: "Complete die casting process design tools for HPDC, LPDC, GDC, Vacuum HPDC, Squeeze Casting, and Semi-Solid / Rheocasting. PQ² diagrams, shot profiles, gate sizing, solidification analysis.",
 };
 
