@@ -328,6 +328,22 @@ export default function PQ2App() {
         ))}
       </div>
 
+      {tab === "calc" && (
+        <div className="no-print" style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+          <button
+            onClick={() => setInp({
+              ...DEFAULTS,
+              Dp: "60", tFillTarget: "0.035", gateDepth: "2.5",
+              specInjP: "750", Vg: "35", VgMin: "30", VgMax: "45",
+              wallThk: "3", overflowAreaRatio: "0.35", runnerAreaRatio: "0.55",
+            })}
+            style={{ ...st.btn, background: "#2ecc71", fontSize: 12.5, padding: "8px 18px" }}
+          >
+            ✨ Optimize — Pre-fill manufacturable values
+          </button>
+        </div>
+      )}
+
       <div className="pq2-grid" style={st.grid}>
         {/* INPUTS */}
         <div className="no-print">

@@ -435,6 +435,22 @@ export default function LPDCCalc() {
         ))}
       </div>
 
+      {tab === "calc" && (
+        <div className="no-print" style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+          <button
+            onClick={() => setInp({
+              ...LPDC_DEFAULTS,
+              ...IDENTITY_DEFAULTS,
+              furnacePressure: "0.65", riserTubeDia: "90", gateArea: "600",
+              wallThk: "4", meltTemp: "700", dieTemp: "280",
+            })}
+            style={{ background: "#2ecc71", color: "#15171b", border: "none", borderRadius: 7, padding: "8px 18px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}
+          >
+            ✨ Optimize — Pre-fill manufacturable values
+          </button>
+        </div>
+      )}
+
       <div className="lpdc-grid" style={st.grid}>
         {/* INPUTS — hidden in print */}
         <div className="no-print">

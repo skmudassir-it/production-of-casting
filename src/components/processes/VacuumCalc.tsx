@@ -642,6 +642,36 @@ export default function VacuumCalc() {
         </button>
       </nav>
 
+      {tab === "calc" && (
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+          <button
+            style={{
+              background: "#2ecc71",
+              color: "#15171b",
+              border: "none",
+              borderRadius: 8,
+              padding: "10px 20px",
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+            onClick={() =>
+              setInp({
+                ...VACUUM_DEFAULTS,
+                vacuumLevel: "30",
+                ventArea: "40",
+                pumpSpeed: "150",
+                gateVelocity: "45",
+                fillTime: "0.025",
+                Cd_discharge: "0.7",
+              })
+            }
+          >
+            ✨ Optimize — Pre-fill manufacturable values
+          </button>
+        </div>
+      )}
+
       {tab === "calc" ? CalcPage : tab === "doc" ? DocPage : FaqPage}
 
       <footer style={st.footer}>

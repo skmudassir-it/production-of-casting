@@ -710,6 +710,21 @@ export default function GDCCalc() {
         </button>
       </nav>
 
+      {tab === "calc" && (
+        <div className="no-print" style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+          <button
+            onClick={() => setInp({
+              ...GDC_DEFAULTS,
+              pourHeight: "250", sprueBottomDia: "18", gateArea: "100",
+              runnerArea: "250", Cd: "0.85", dieTemp: "220",
+            })}
+            style={{ background: "#2ecc71", color: "#15171b", border: "none", borderRadius: 7, padding: "8px 18px", fontWeight: 700, fontSize: 12.5, cursor: "pointer" }}
+          >
+            ✨ Optimize — Pre-fill manufacturable values
+          </button>
+        </div>
+      )}
+
       {tab === "calc" ? CalcPage : tab === "doc" ? DocPage : FaqPage}
 
       <footer style={st.footer}>
