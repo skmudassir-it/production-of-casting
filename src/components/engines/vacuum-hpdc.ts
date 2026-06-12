@@ -13,6 +13,7 @@ export const VACUUM_DEFAULTS: Record<string, string> = {
   // Standard HPDC casting
   plungerDia: "60",         // mm — plunger diameter Dp
   shotWt: "500",            // g — shot weight
+  alloy: "AlSi132 (Al-Si)", // material selection
   density: "2.65",          // g/cc — alloy density
   gateVelocity: "40",       // m/s — gate velocity Vg (higher for vacuum)
   fillTime: "30",           // ms — fill time tFill

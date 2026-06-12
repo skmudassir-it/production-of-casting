@@ -22,6 +22,7 @@ export const SSM_DEFAULTS: Record<string, string> = {
   // Machine & shot
   plungerDia: "80",         // mm — plunger diameter Dp
   shotWt: "2000",           // g — total shot weight
+  alloy: "AlSi132 (Al-Si)", // material selection
   density: "2.65",          // g/cc — alloy density (Al-Si ≈ 2.65)
   cavities: "1",            // — number of cavities
 

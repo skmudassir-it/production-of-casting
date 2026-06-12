@@ -15,6 +15,7 @@ export const GDC_DEFAULTS = {
   runnerArea: "200",         // mm² — total runner cross-sectional area
   gateArea: "80",            // mm² — total gate cross-sectional area
   castWt: "3000",            // g — casting weight per cavity
+  alloy: "AlSi132 (Al-Si)",  // — selected alloy name
   alloyDensity: "2.65",      // g/cc — density of molten alloy
   cavities: "1",             // — number of cavities
   wallThk: "8",              // mm — minimum wall thickness

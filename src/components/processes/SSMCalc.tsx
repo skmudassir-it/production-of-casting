@@ -9,6 +9,21 @@ import {
   SSM_FAQ,
 } from "../engines/ssm";
 
+const MATERIALS = [
+  { name: "AlSi132 (Al-Si)", density: "2.65" },
+  { name: "ADC12 (Al-Si-Cu)", density: "2.70" },
+  { name: "A380 (Al-Si-Cu)", density: "2.71" },
+  { name: "AlSi9Cu3 (Al-Si-Cu)", density: "2.68" },
+  { name: "LM6 (Al-Si)", density: "2.65" },
+  { name: "AlSi10Mg (Al-Si-Mg)", density: "2.66" },
+  { name: "AZ91D (Magnesium)", density: "1.81" },
+  { name: "AM60 (Magnesium)", density: "1.80" },
+  { name: "ZAMAK 3 (Zinc)", density: "6.60" },
+  { name: "ZAMAK 5 (Zinc)", density: "6.70" },
+  { name: "Brass C85700 (Cu-Zn)", density: "8.50" },
+  { name: "Custom", density: "" },
+];
+
 // ═══════════ SHARED UI HELPERS ═══════════
 const fmt = (v: number, d = 2): string =>
   !isFinite(v) ? "—" : Number(v).toLocaleString("en-IN", { maximumFractionDigits: d });
@@ -264,6 +279,38 @@ export default function SSMCalc() {
           <Sec title="Machine &amp; shot">
             <Field label="Plunger diameter, Dp" value={inp.plungerDia} onChange={set("plungerDia")} unit="mm" />
             <Field label="Shot weight" value={inp.shotWt} onChange={set("shotWt")} unit="g" />
+            <label style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "5px 0",
+            }}>
+              <span style={{ fontSize: 12.5, color: "#b9bec8" }}>Material</span>
+              <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <select
+                  value={inp.alloy || ""}
+                  onChange={(e) => {
+                    const mat = MATERIALS.find((m) => m.name === e.target.value);
+                    setInp((p) => ({
+                      ...p,
+                      alloy: e.target.value,
+                      density: mat?.density ?? p.density,
+                    }));
+                  }}
+                  style={{
+                    background: "#101216",
+                    border: "1px solid #343943",
+                    borderRadius: 6,
+                    color: "#fff",
+                    padding: "6px 8px",
+                    width: 180,
+                    fontSize: 13,
+                  }}
+                >
+                  {MATERIALS.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
+                </select>
+              </span>
+            </label>
             <Field label="Alloy density" value={inp.density} onChange={set("density")} unit="g/cc" />
           </Sec>
 

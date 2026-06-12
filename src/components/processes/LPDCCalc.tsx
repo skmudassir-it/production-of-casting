@@ -16,7 +16,26 @@ const IDENTITY_DEFAULTS = {
   partNumber: "",
   partName: "",
   customer: "",
+  alloy: "",
 };
+
+// ═══════════════════════════════════════════════════════════════
+// MATERIAL DATABASE
+// ═══════════════════════════════════════════════════════════════
+const MATERIALS = [
+  { name: "AlSi132 (Al-Si)", density: "2.65" },
+  { name: "ADC12 (Al-Si-Cu)", density: "2.70" },
+  { name: "A380 (Al-Si-Cu)", density: "2.71" },
+  { name: "AlSi9Cu3 (Al-Si-Cu)", density: "2.68" },
+  { name: "LM6 (Al-Si)", density: "2.65" },
+  { name: "AlSi10Mg (Al-Si-Mg)", density: "2.66" },
+  { name: "AZ91D (Magnesium)", density: "1.81" },
+  { name: "AM60 (Magnesium)", density: "1.80" },
+  { name: "ZAMAK 3 (Zinc)", density: "6.60" },
+  { name: "ZAMAK 5 (Zinc)", density: "6.70" },
+  { name: "Brass C85700 (Cu-Zn)", density: "8.50" },
+  { name: "Custom", density: "" },
+];
 
 // ═══════════════════════════════════════════════════════════════
 // SHARED UI HELPERS
@@ -468,6 +487,35 @@ export default function LPDCCalc() {
               unit="mm"
             />
             <Field label="Melt temperature" k="meltTemp" unit="°C" />
+
+            {/* Material selector — auto-fills density */}
+            <label style={st.field}>
+              <span style={st.fieldLabel}>Material / Alloy</span>
+              <select
+                value={(inp as Record<string, string>)["alloy"] || ""}
+                onChange={(e) => {
+                  const mat = MATERIALS.find((m) => m.name === e.target.value);
+                  setInp((p) => ({
+                    ...p,
+                    alloy: e.target.value,
+                    alloyDensity: mat?.density || p.alloyDensity,
+                  }));
+                }}
+                style={{
+                  ...st.input,
+                  width: 130,
+                  padding: "6px 6px",
+                }}
+              >
+                <option value="">— Select —</option>
+                {MATERIALS.map((m) => (
+                  <option key={m.name} value={m.name}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <Field label="Alloy density" k="alloyDensity" unit="g/cc" />
           </Sec>
 

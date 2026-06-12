@@ -23,6 +23,7 @@ export const LPDC_DEFAULTS = {
   kThermal: "0.0346",        // s/cm — empirical thermal constant (Al ≈ 0.0346)
   Tf: "580",                 // °C — minimum flow temperature (liquidus)
   Z: "3.8",                  // °C — conversion factor (superheat → equivalent solid fraction)
+  alloy: "",                 // — selected material / alloy name
 };
 
 // ── COMPUTE FUNCTION ──────────────────────────────────────────

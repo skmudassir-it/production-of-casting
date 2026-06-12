@@ -27,6 +27,21 @@ const DEFAULT_MACHINES = [
 ];
 const ALLOYS = ["AlSi132", "ADC12", "A380", "AlSi9Cu3", "LM6", "AlSi10Mg"];
 
+const MATERIALS = [
+  { name: "AlSi132 (Al-Si)", density: "2.65" },
+  { name: "ADC12 (Al-Si-Cu)", density: "2.70" },
+  { name: "A380 (Al-Si-Cu)", density: "2.71" },
+  { name: "AlSi9Cu3 (Al-Si-Cu)", density: "2.68" },
+  { name: "LM6 (Al-Si)", density: "2.65" },
+  { name: "AlSi10Mg (Al-Si-Mg)", density: "2.66" },
+  { name: "AZ91D (Magnesium)", density: "1.81" },
+  { name: "AM60 (Magnesium)", density: "1.80" },
+  { name: "ZAMAK 3 (Zinc)", density: "6.60" },
+  { name: "ZAMAK 5 (Zinc)", density: "6.70" },
+  { name: "Brass C85700 (Cu-Zn)", density: "8.50" },
+  { name: "Custom", density: "" },
+];
+
 const DEFAULTS = {
   partNumber: "AF101562", partName: "COVER WATER PUMP", customer: "",
   machine: "250 TOSHIBA CHINA", Dp: "50",
@@ -426,9 +441,20 @@ export default function PQ2App() {
             <Field label="Biscuit thickness" k="biscuitThk" unit="mm" />
             <Field label="Number of cavities" k="cavities" />
             <label style={st.field}>
-              <span style={st.fieldLabel}>Alloy</span>
-              <select value={inp.alloy} onChange={set("alloy")} style={{ ...st.input, width: 180 }}>
-                {ALLOYS.map((a) => <option key={a}>{a}</option>)}
+              <span style={st.fieldLabel}>Material</span>
+              <select
+                value={inp.alloy}
+                onChange={(e) => {
+                  const mat = MATERIALS.find((m) => m.name === e.target.value);
+                  setInp((p) => ({
+                    ...p,
+                    alloy: e.target.value,
+                    density: mat?.density || p.density,
+                  }));
+                }}
+                style={{ ...st.input, width: 200 }}
+              >
+                {MATERIALS.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
               </select>
             </label>
             <Field label="Density" k="density" unit="g/cc" />

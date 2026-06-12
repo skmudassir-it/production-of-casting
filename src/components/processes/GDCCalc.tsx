@@ -3,6 +3,21 @@
 import { useState, useMemo } from "react";
 import { GDC_DEFAULTS, computeGDC, gdcChecks, GDC_DOC, GDC_FAQ } from "../engines/gdc";
 
+const MATERIALS = [
+  { name: "AlSi132 (Al-Si)", density: "2.65" },
+  { name: "ADC12 (Al-Si-Cu)", density: "2.70" },
+  { name: "A380 (Al-Si-Cu)", density: "2.71" },
+  { name: "AlSi9Cu3 (Al-Si-Cu)", density: "2.68" },
+  { name: "LM6 (Al-Si)", density: "2.65" },
+  { name: "AlSi10Mg (Al-Si-Mg)", density: "2.66" },
+  { name: "AZ91D (Magnesium)", density: "1.81" },
+  { name: "AM60 (Magnesium)", density: "1.80" },
+  { name: "ZAMAK 3 (Zinc)", density: "6.60" },
+  { name: "ZAMAK 5 (Zinc)", density: "6.70" },
+  { name: "Brass C85700 (Cu-Zn)", density: "8.50" },
+  { name: "Custom", density: "" },
+];
+
 // ────────────────────────────────────────────────────────────
 // SHARED UI HELPERS
 // ────────────────────────────────────────────────────────────
@@ -423,6 +438,43 @@ export default function GDCCalc() {
               onChange={set("castWt")}
               unit="g"
             />
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 10,
+                padding: "5px 0",
+              }}
+            >
+              <span style={{ fontSize: 12.5, color: "#b9bec8", flex: 1 }}>Material</span>
+              <select
+                value={inp.alloy ?? ""}
+                onChange={(e) => {
+                  const mat = MATERIALS.find((m) => m.name === e.target.value);
+                  setInp((p) => ({
+                    ...p,
+                    alloy: e.target.value,
+                    alloyDensity: mat?.density ?? p.alloyDensity,
+                  }));
+                }}
+                style={{
+                  background: "#101216",
+                  border: "1px solid #343943",
+                  borderRadius: 6,
+                  color: "#fff",
+                  padding: "6px 8px",
+                  width: 164,
+                  fontSize: 13,
+                }}
+              >
+                {MATERIALS.map((m) => (
+                  <option key={m.name} value={m.name}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
+            </label>
             <Field
               label="Alloy density"
               value={inp.alloyDensity}

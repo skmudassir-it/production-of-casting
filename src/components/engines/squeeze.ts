@@ -7,6 +7,7 @@ export const SQUEEZE_DEFAULTS: Record<string, string> = {
   squeezePressure: "80",    // MPa — applied squeeze pressure
   plungerDia: "100",        // mm — plunger diameter Dp
   castWt: "2500",           // g — casting weight per cavity
+  alloy: "AlSi132 (Al-Si)", // material selection
   density: "2.65",          // g/cc — alloy density
   wallThk: "15",            // mm — casting wall thickness
   sectionMod: "20",         // mm — section modulus (V/A)
